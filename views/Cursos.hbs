@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{> Head }}
+
+<body>
+    {{> Navbar }}
+    <main class="container-fluid my-3 mx-auto row">
+        {{#each carreras}}
+        {{> Card }}
+        {{/each}}
+    </main>
+
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+</body>
+
+</html>
