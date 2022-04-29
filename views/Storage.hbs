@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{{> Head }}
+
+<body>
+    {{> Navbar }}
+    <main class="container my-3">
+        <form>
+            <label for="nombre" class="form-label">Nombre</label>
+            <input id="nombre" class="form-control" name="nombre" type="text">
+            <button type="submit" class="btn btn-primary mt-3">Agregar</button>
+        </form>
+        <ul id="tareas"></ul>
+    </main>
+    <script>
+        let tareas = [];
+        cargarTareas();
+
+        function cargarTareas() {
+            // Validar que exista el dato en localStorage
+            if (localStorage.getItem("tareas")) {
+                // Pasar la cadena de texto a un arreglo de JS utilizando JSON.parse
+                tareas = JSON.parse(localStorage.getItem("tareas"));
+            }
+
+            pintarTareas();
+        };
+
+        function pintarTareas() {
+            let template = tareas.map((tarea, indice) => {
+                return `<li onclick="eliminarTarea('${indice}')">${tarea.nombre}</li>`
+            }).join("");
+
+            // 1, 2, 3 => map(numero => numero x 2) => 2, 4, 6
+            // 1, 2, 3 =>
+            // <li onclick="eliminarTarea('${indice}')">${tarea.nombre}</li>
+            // <li onclick="eliminarTarea('${indice}')">${tarea.nombre}</li>
+
+            document.querySelector("#tareas").innerHTML = template;
+        }
+
+        document.querySelector("form").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const tarea = Object.fromEntries(formData);
+            agregarTarea(tarea);
+        });
+
+        function agregarTarea(tarea) {
+            if (tarea.nombre) {
+                tareas.push(tarea);
+                localStorage.setItem("tareas", JSON.stringify(tareas));
+                pintarTareas();
+            } else {
+                alert("Ingrese un valor válido")
+            }
+        }
+
+        function eliminarTarea(indice) {
+            tareas.splice(indice, 1);
+            localStorage.setItem("tareas", JSON.stringify(tareas));
+            pintarTareas();
+        }
+
+    </script>
+</body>
+
+</html>
